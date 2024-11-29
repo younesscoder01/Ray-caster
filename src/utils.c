@@ -1,4 +1,4 @@
-#include "../inc/raycaster.h"
+#include "../includes/raycaster.h"
 
 
 double deg2rad(double x)
@@ -92,7 +92,7 @@ void render_wall(char **map, t_data *data)
         while (map[i[0]][i[1]])
         {
             if ( map[i[0]][i[1]] == '1')
-                render_tiles(data, i[1] * TILE_SIZE, i[0] * TILE_SIZE, 0x00000000);
+                render_tiles(data, i[1] * TILE_SIZE, i[0] * TILE_SIZE, GREEN);
             i[1]++;
         }
         i[0]++;
@@ -118,20 +118,46 @@ void render_floor(char **map, t_data *data)
     }
 }
 
-// void draw_circle(int x, int y, int r, t_data *data)
-// {
-   
-// }
+void draw_line(double x, double y, double x1, double y1, t_player *p, t_data *data)
+{
+    double dx;
+    double dy;
+    double xinc;
+    double yinc;
+    double steps;
+    int i = 0;
+
+    dx = x1 - x;
+    dy = y1 - y;
+    if (abs(dx) > abs(dy))
+        steps = abs(dx);
+    else 
+        steps = abs(dy);
+    xinc = dx / steps;
+    yinc = dy / steps;
+    while (i <= steps)
+    {
+        ft_put_pixel(data, x, y, BLUE);
+        x += xinc;
+        y += yinc;
+        i++;
+    }
+}
 
 void render_p(char **map, t_data *data, t_player *p)
 {
     int d;
+    double x1;
+    double y1;
 
     d = p->radius*2;
     for (int i = 0; i < d; i++)
         for (int j = 0; j < d; j++)
-            if (pow(j-p->radius, 2) + pow(i-p->radius,2) <= pow(p->radius,2))
-                ft_put_pixel(data, j+p->x-p->radius, i+p->y-p->radius, 0x00FF0000);
+            if (pow(j - p->radius, 2) + pow(i - p->radius,2) <= pow(p->radius,2))
+                ft_put_pixel(data, j+p->x-p->radius, i+p->y-p->radius, BLUE);
+    x1 = p->x + cos(deg2rad(p->rotationAngle)) * 20;
+    y1 = p->y + sin(deg2rad(p->rotationAngle)) * 20;
+    draw_line(p->x, p->y, x1, y1, p, data);
 }
 
 

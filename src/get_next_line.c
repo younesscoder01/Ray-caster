@@ -1,4 +1,4 @@
-#include "../inc/raycaster.h"
+#include "../includes/raycaster.h"
 
 static char	*ft_join_and_free(char *result, char *buffer)
 {

@@ -1,4 +1,4 @@
-#include "../inc/raycaster.h"
+#include "../includes/raycaster.h"
 
 //ft_strchr()
 char	*ft_strchr(const char *s, int c)

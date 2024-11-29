@@ -10,8 +10,27 @@
 #include <math.h>
 #include <unistd.h>
 
-#define TILE_SIZE 64
+# define M_PI	3.14159265358979323846	/* pi */
+# define TILE_SIZE	32
+# define RADIUS 4
+# define GREEN 0x0000FF00
+# define RED 0x00FF0000
+# define BLUE 0x000000FF
+# define WHITE 0x00FFFFFF
+# define BLACK 0x00000000
+# define YELLOW 0x00FFFF00
 
+enum {
+	KEY_W = 119,
+	KEY_A = 97,
+	KEY_S = 115,
+	KEY_D = 100,
+	KEY_UP = 65362,
+	KEY_DOWN = 65364,
+	KEY_LEFT = 65361,
+	KEY_RIGHT = 65363,
+	ESC = 65307
+};
 
 typedef struct	s_data {
 	void	*img;
@@ -27,12 +46,12 @@ typedef struct s_player
 {
 	int x;
 	int y;
-	int radius;
-	int turnDirection;
-	int walkDirection;
-	int rotationAngle;
+	double radius;
+	double turnDirection;
+	double walkDirection;
+	double rotationAngle;
 	double moveSpeed;
-	int rotationSpeed;
+	double rotationSpeed;
 }				t_player;
 
 enum {
@@ -69,4 +88,6 @@ int key_p(int keycode, void *var);
 void move_up( t_param *param);
 int render_next_frame(void *var);
 void remove_p(char **map);
+int key_r(int keycode, void *var);
+double deg2rad(double x);
 #endif

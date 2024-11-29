@@ -1,14 +1,14 @@
-#include "../inc/raycaster.h"
+#include "../includes/raycaster.h"
 
 
 void p_setup(t_player *p, char **map)
 {
-    p->radius = 9;
+    p->radius = RADIUS;
     p->turnDirection = 0;
     p->walkDirection = 0;
-    p->rotationAngle = M_PI / 2;
-    p->moveSpeed = 2.0;
-    p->rotationSpeed = 3 * (M_PI / 180);
+    p->rotationAngle = 90;
+    p->moveSpeed = 6.0;
+    p->rotationSpeed = 7;
     p->x = (get_player_x(map) * TILE_SIZE) + TILE_SIZE / 2;
     p->y = (get_player_y(map) * TILE_SIZE) + TILE_SIZE/ 2;
 }
@@ -63,6 +63,7 @@ int	main(int argc, char **argv)
     remove_p(map);
     mlx_hook(mlx_win, ON_DESTROY, 0, close_win, &var);
     mlx_hook(mlx_win, ON_KEYDOWN, 1L << 0, key_p, &var);
+    mlx_hook(mlx_win, ON_KEYUP, 1L << 1, key_r, &var);
     mlx_loop_hook(mlx, render_next_frame, &var);
     mlx_loop(mlx);
     return 0;
