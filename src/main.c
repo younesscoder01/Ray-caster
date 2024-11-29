@@ -6,7 +6,7 @@ void p_setup(t_player *p, char **map)
     p->radius = RADIUS;
     p->turnDirection = 0;
     p->walkDirection = 0;
-    p->rotationAngle = 90;
+    p->rotationAngle = 45;
     p->moveSpeed = 6.0;
     p->rotationSpeed = 7;
     p->x = (get_player_x(map) * TILE_SIZE) + TILE_SIZE / 2;
@@ -30,6 +30,7 @@ int	main(int argc, char **argv)
     t_param var;
     t_data img;
     t_player p;
+    t_ray rays[NUM_RAYS];
 
     if (argc != 2)
         return (printf("Error\n"), 1);
@@ -60,6 +61,7 @@ int	main(int argc, char **argv)
     var.data = img;
     var.player = p;
     var.map = map;
+    var.rays = rays;
     remove_p(map);
     mlx_hook(mlx_win, ON_DESTROY, 0, close_win, &var);
     mlx_hook(mlx_win, ON_KEYDOWN, 1L << 0, key_p, &var);

@@ -92,7 +92,7 @@ void render_wall(char **map, t_data *data)
         while (map[i[0]][i[1]])
         {
             if ( map[i[0]][i[1]] == '1')
-                render_tiles(data, i[1] * TILE_SIZE, i[0] * TILE_SIZE, GREEN);
+                render_tiles(data, i[1] * TILE_SIZE, i[0] * TILE_SIZE, BLACK);
             i[1]++;
         }
         i[0]++;
@@ -111,14 +111,14 @@ void render_floor(char **map, t_data *data)
         while (map[i[0]][i[1]])
         {
             if ( map[i[0]][i[1]] == '0' || map[i[0]][i[1]] == 'P')
-                render_tiles(data, i[1] * TILE_SIZE, i[0] * TILE_SIZE, 0x00FFFFFF);
+                render_tiles(data, i[1] * TILE_SIZE, i[0] * TILE_SIZE, WHITE);
             i[1]++;
         }
         i[0]++;
     }
 }
 
-void draw_line(double x, double y, double x1, double y1, t_player *p, t_data *data)
+void draw_line(double x, double y, double x1, double y1, t_player *p, t_data *data, int color)
 {
     double dx;
     double dy;
@@ -137,7 +137,7 @@ void draw_line(double x, double y, double x1, double y1, t_player *p, t_data *da
     yinc = dy / steps;
     while (i <= steps)
     {
-        ft_put_pixel(data, x, y, BLUE);
+        ft_put_pixel(data, x, y, color);
         x += xinc;
         y += yinc;
         i++;
@@ -154,10 +154,10 @@ void render_p(char **map, t_data *data, t_player *p)
     for (int i = 0; i < d; i++)
         for (int j = 0; j < d; j++)
             if (pow(j - p->radius, 2) + pow(i - p->radius,2) <= pow(p->radius,2))
-                ft_put_pixel(data, j+p->x-p->radius, i+p->y-p->radius, BLUE);
+                ft_put_pixel(data, j+p->x-p->radius, i+p->y-p->radius, RED);
     x1 = p->x + cos(deg2rad(p->rotationAngle)) * 20;
     y1 = p->y + sin(deg2rad(p->rotationAngle)) * 20;
-    draw_line(p->x, p->y, x1, y1, p, data);
+    draw_line(p->x, p->y, x1, y1, p, data, RED);
 }
 
 

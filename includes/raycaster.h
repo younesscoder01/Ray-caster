@@ -19,6 +19,11 @@
 # define WHITE 0x00FFFFFF
 # define BLACK 0x00000000
 # define YELLOW 0x00FFFF00
+# define ORANGE 0x00FFA500
+# define PURPLE 0x008A2BE2
+
+# define FOV_ANGLE 60
+# define NUM_RAYS 320
 
 enum {
 	KEY_W = 119,
@@ -63,16 +68,25 @@ enum {
 	ON_EXPOSE = 12,
 	ON_DESTROY = 17
 };
+
+typedef struct s_ray 
+{
+	double rayAngle;
+	int columnId;
+	int ray_lenght;
+}  t_ray;
+
 typedef struct s_param
 {
     void	*mlx;
     void	*mlx_win;
 	t_data data;
 	t_player player;
+	t_ray *rays;
 	char **map;
 } t_param;
 
-
+void draw_line(double x, double y, double x1, double y1, t_player *p, t_data *data, int color);
 int get_player_y(char **map);
 int get_player_x(char **map);
 int count_file_lines(char *file_name);
