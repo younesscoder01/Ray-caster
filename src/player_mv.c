@@ -207,6 +207,7 @@ int render_next_frame(void *var)
     render_floor(param->map, &param->data);
     castAllrays(param);
     render_p(param->map, &param->data, &param->player);
+    castAllrays(param);
     mlx_put_image_to_window(param->mlx, param->mlx_win, param->data.img, 0 , 0);
     return 0;
 }
