@@ -77,6 +77,7 @@ typedef struct s_ray
 {
 	double rayAngle;
 	int columnId;
+<<<<<<< HEAD
 	int wallHitX;
 	int wallHitY;
 	double distance;
@@ -84,6 +85,9 @@ typedef struct s_ray
 	int isRayFacingUp;
 	int isRayFacingRight;
 	int isRayFacingLeft;
+=======
+	int ray_lenght;
+>>>>>>> e3c56d454f697e9faaee0add8494643ecdd09b42
 }  t_ray;
 
 typedef struct s_param

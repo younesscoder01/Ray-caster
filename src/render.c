@@ -154,10 +154,14 @@ void render_p(char **map, t_data *data, t_player *p)
     for (int i = 0; i < d; i++)
         for (int j = 0; j < d; j++)
             if (pow(j - p->radius, 2) + pow(i - p->radius,2) <= pow(p->radius,2))
-                ft_put_pixel(data, j+p->x-p->radius, i+p->y-p->radius, BLUE);
+                ft_put_pixel(data, j+p->x-p->radius, i+p->y-p->radius, RED);
     x1 = p->x + cos(deg2rad(p->rotationAngle)) * 20;
     y1 = p->y + sin(deg2rad(p->rotationAngle)) * 20;
+<<<<<<< HEAD:src/render.c
     draw_line(p->x, p->y, x1, y1, p, data, BLUE);
+=======
+    draw_line(p->x, p->y, x1, y1, p, data, RED);
+>>>>>>> e3c56d454f697e9faaee0add8494643ecdd09b42:src/utils.c
 }
 
 
