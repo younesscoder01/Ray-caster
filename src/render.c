@@ -71,7 +71,7 @@ void render_tiles(t_data *data, int x, int y, int color)
         while (i[1] < TILE_SIZE)
         {
             if (i[0] == 0 || i[1] == 0 || i[0] == data->window_height || i[1] == data->window_weight)
-               ft_put_pixel(data, x + i[1], y + i[0], 0x00000000);
+               ft_put_pixel(data, x + i[1], y + i[0], BLACK);
             else
                 ft_put_pixel(data, x + i[1], y + i[0], color);
             i[1]++;
@@ -92,7 +92,7 @@ void render_wall(char **map, t_data *data)
         while (map[i[0]][i[1]])
         {
             if ( map[i[0]][i[1]] == '1')
-                render_tiles(data, i[1] * TILE_SIZE, i[0] * TILE_SIZE, BLACK);
+                render_tiles(data, i[1] * TILE_SIZE, i[0] * TILE_SIZE, ORANGE);
             i[1]++;
         }
         i[0]++;
@@ -154,10 +154,10 @@ void render_p(char **map, t_data *data, t_player *p)
     for (int i = 0; i < d; i++)
         for (int j = 0; j < d; j++)
             if (pow(j - p->radius, 2) + pow(i - p->radius,2) <= pow(p->radius,2))
-                ft_put_pixel(data, j+p->x-p->radius, i+p->y-p->radius, RED);
+                ft_put_pixel(data, j+p->x-p->radius, i+p->y-p->radius, BLUE);
     x1 = p->x + cos(deg2rad(p->rotationAngle)) * 20;
     y1 = p->y + sin(deg2rad(p->rotationAngle)) * 20;
-    draw_line(p->x, p->y, x1, y1, p, data, RED);
+    draw_line(p->x, p->y, x1, y1, p, data, BLUE);
 }
 
 
@@ -193,6 +193,7 @@ int count_file_lines(char *file_name)
         //     return i;
         line = get_next_line(fd);
     }
+    printf("the number of lines is %i\n", i);
     return (i);
 }
 

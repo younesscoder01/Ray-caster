@@ -6,7 +6,7 @@ void p_setup(t_player *p, char **map)
     p->radius = RADIUS;
     p->turnDirection = 0;
     p->walkDirection = 0;
-    p->rotationAngle = 45;
+    p->rotationAngle = 0;
     p->moveSpeed = 6.0;
     p->rotationSpeed = 7;
     p->x = (get_player_x(map) * TILE_SIZE) + TILE_SIZE / 2;

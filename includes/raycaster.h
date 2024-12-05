@@ -9,21 +9,25 @@
 #include <stdlib.h>
 #include <math.h>
 #include <unistd.h>
+#include <limits.h>
 
 # define M_PI	3.14159265358979323846	/* pi */
-# define TILE_SIZE	32
-# define RADIUS 4
 # define GREEN 0x0000FF00
 # define RED 0x00FF0000
 # define BLUE 0x000000FF
 # define WHITE 0x00FFFFFF
 # define BLACK 0x00000000
 # define YELLOW 0x00FFFF00
-# define ORANGE 0x00FFA500
+# define ORANGE 0x00EB5B00
 # define PURPLE 0x008A2BE2
+# define PINK 0x00D91656
 
+# define TILE_SIZE	32
+# define RADIUS 4
 # define FOV_ANGLE 60
-# define NUM_RAYS 320
+# define WINDOW_WIDTH 320
+# define WALL_STRIP_WIDTH 1
+# define NUM_RAYS WINDOW_WIDTH / WALL_STRIP_WIDTH
 
 enum {
 	KEY_W = 119,
@@ -73,7 +77,13 @@ typedef struct s_ray
 {
 	double rayAngle;
 	int columnId;
-	int ray_lenght;
+	int wallHitX;
+	int wallHitY;
+	double distance;
+	int isRayFacingDown;
+	int isRayFacingUp;
+	int isRayFacingRight;
+	int isRayFacingLeft;
 }  t_ray;
 
 typedef struct s_param
@@ -104,4 +114,6 @@ int render_next_frame(void *var);
 void remove_p(char **map);
 int key_r(int keycode, void *var);
 double deg2rad(double x);
+void ft_put_pixel(t_data *data, int x, int y, int color);
+double normalizeAngle(double angle);
 #endif
