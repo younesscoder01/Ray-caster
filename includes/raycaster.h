@@ -22,12 +22,15 @@
 # define PURPLE 0x008A2BE2
 # define PINK 0x00D91656
 
+
 # define TILE_SIZE	32
 # define RADIUS 4
 # define FOV_ANGLE 60
-# define WINDOW_WIDTH 320
+# define WINDOW_WIDTH 720
+# define WINDOW_HEIGHT 320
 # define WALL_STRIP_WIDTH 1
 # define NUM_RAYS WINDOW_WIDTH / WALL_STRIP_WIDTH
+# define MINIMAP_SCALE_FACTOR 0.5
 
 enum {
 	KEY_W = 119,
@@ -41,15 +44,15 @@ enum {
 	ESC = 65307
 };
 
-typedef struct	s_data {
+typedef struct	s_img_info {
 	void	*img;
 	char	*addr;
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
     size_t window_height;
-    size_t window_weight;
-}				t_data;
+    size_t window_width;
+}				t_img_info;
 
 typedef struct s_player
 {
@@ -77,7 +80,6 @@ typedef struct s_ray
 {
 	double rayAngle;
 	int columnId;
-<<<<<<< HEAD
 	int wallHitX;
 	int wallHitY;
 	double distance;
@@ -85,39 +87,39 @@ typedef struct s_ray
 	int isRayFacingUp;
 	int isRayFacingRight;
 	int isRayFacingLeft;
-=======
-	int ray_lenght;
->>>>>>> e3c56d454f697e9faaee0add8494643ecdd09b42
 }  t_ray;
 
 typedef struct s_param
 {
     void	*mlx;
     void	*mlx_win;
-	t_data data;
+	t_img_info data;
 	t_player player;
 	t_ray *rays;
+	t_img_info img3d;
 	char **map;
 } t_param;
 
-void draw_line(double x, double y, double x1, double y1, t_player *p, t_data *data, int color);
+void draw_line(double x, double y, double x1, double y1, t_player *p, t_img_info *data, int color);
 int get_player_y(char **map);
 int get_player_x(char **map);
 int count_file_lines(char *file_name);
 void flood_fill(char **map, int x, int y, int h, int w, t_param par);
-void render_floor(char **map, t_data *data);
-void render_wall(char **map, t_data *data);
-void render_tiles(t_data *data, int x, int y, int color);
+void render_floor(char **map, t_img_info *data);
+void render_wall(char **map, t_img_info *data);
+void render_tiles(t_img_info *data, int x, int y, int color);
 size_t get_map_height(char **map);
 size_t get_map_weight(char **map);
 char **create_map(int lines, char *file_name);
-void render_p(char **map, t_data *data, t_player *p);
+void render_p(char **map, t_img_info *data, t_player *p);
 int key_p(int keycode, void *var);
 void move_up( t_param *param);
 int render_next_frame(void *var);
 void remove_p(char **map);
 int key_r(int keycode, void *var);
 double deg2rad(double x);
-void ft_put_pixel(t_data *data, int x, int y, int color);
+void ft_put_pixel(t_img_info *data, int x, int y, int color);
 double normalizeAngle(double angle);
+void render_3d(t_param *param);
+void rect(t_img_info *data, int x, int y, int width, int height, int color);
 #endif

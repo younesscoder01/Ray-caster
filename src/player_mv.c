@@ -28,7 +28,6 @@ int key_p(int keycode, void *var)
         param->player.x = check_x;
     if (param->map[check_y / TILE_SIZE][param->player.x / TILE_SIZE] != '1')
         param->player.y = check_y;
-    printf("x: %i\ny: %i\n", param->player.x, param->player.y);
     return 0;
 }
 
@@ -122,7 +121,7 @@ void castAllrays(t_param *param)
             xstep *= -1;
         if (param->rays[i].isRayFacingUp)
             py = 1;
-        while (xintercept >= 0 && xintercept < param->data.window_weight \
+        while (xintercept >= 0 && xintercept < param->data.window_width \
                 && yintercept >= 0 && yintercept < param->data.window_height )
         {
             if (param->map[((int)yintercept / TILE_SIZE) - py][(int)xintercept / TILE_SIZE] == '1')
@@ -152,7 +151,7 @@ void castAllrays(t_param *param)
             ystep *= -1;
         if (param->rays[i].isRayFacingLeft)
             px = 1;
-        while (xintercept >= 0 && xintercept < param->data.window_weight \
+        while (xintercept >= 0 && xintercept < param->data.window_width \
                 && yintercept >= 0 && yintercept < param->data.window_height )
         {
             if (param->map[(int)yintercept / TILE_SIZE][((int)xintercept / TILE_SIZE) - px] == '1')
@@ -188,12 +187,12 @@ void castAllrays(t_param *param)
             param->rays[i].wallHitY = Vhity;
         }
         // printf("after rayAngle: %f\n", rayAngle);
-        draw_line(param->player.x, param->player.y,  param->rays[i].wallHitX,  param->rays[i].wallHitY, &param->player, &param->data, PINK);
+        draw_line(param->player.x * MINIMAP_SCALE_FACTOR, param->player.y * MINIMAP_SCALE_FACTOR,  param->rays[i].wallHitX * MINIMAP_SCALE_FACTOR,  param->rays[i].wallHitY * MINIMAP_SCALE_FACTOR, &param->player, &param->data, PINK);
         // printf("rayAngle: %f\n", rayAngle);
         rayAngle += (double)(FOV_ANGLE) / (double)(NUM_RAYS);
         i++;
     }
-    printf("player angle: %f\n", param->player.rotationAngle);
+    // printf("player angle: %f\n", param->player.rotationAngle);
 }
 
 
@@ -208,6 +207,13 @@ int render_next_frame(void *var)
     castAllrays(param);
     render_p(param->map, &param->data, &param->player);
     castAllrays(param);
+    render_3d(param);
+    mlx_put_image_to_window(param->mlx, param->mlx_win, param->img3d.img, 0 , 0);
     mlx_put_image_to_window(param->mlx, param->mlx_win, param->data.img, 0 , 0);
+    mlx_destroy_image(param->mlx, param->img3d.img);
+    param->img3d.img = mlx_new_image(param->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);  
+    param->img3d.addr = mlx_get_data_addr(param->img3d.img, &param->img3d.bits_per_pixel, &param->img3d.line_length, &param->img3d.endian);
+    param->img3d.window_height = WINDOW_HEIGHT;
+    param->img3d.window_width = WINDOW_WIDTH;
     return 0;
 }

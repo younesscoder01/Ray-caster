@@ -1,4 +1,4 @@
-SRC= ./src/main.c ./src/get_next_line.c ./src/get_next_line_utils.c ./src/render.c ./src/player_mv.c
+SRC= ./src/main.c ./src/get_next_line.c ./src/get_next_line_utils.c ./src/render.c ./src/player_mv.c ./src/render-walls.c
 OBJ=$(SRC:.c=.o)
 CFLAGS= -lm -I/usr/local/include -I./include/raycaster.h -lmlx -lXext -lX11 -O3 -g3
 NAME=raycaster

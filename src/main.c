@@ -28,7 +28,8 @@ int	main(int argc, char **argv)
     void	*mlx_win;
     char **map;
     t_param var;
-    t_data img;
+    t_img_info img;
+    t_img_info img3d;
     t_player p;
     t_ray rays[NUM_RAYS];
 
@@ -44,13 +45,19 @@ int	main(int argc, char **argv)
         printf("%s\n", map[i]);
     }
     img.window_height = get_map_height(map) * TILE_SIZE;
-    img.window_weight = get_map_weight(map) * TILE_SIZE;
-    if (img.window_weight > 1920 || img.window_height > 1080)
+    img.window_width = get_map_weight(map) * TILE_SIZE;
+    printf("the width of the map is %zu\n", img.window_width);
+    printf("the height of the map is %zu\n", img.window_height);
+    if (img.window_width > 1920 || img.window_height > 1080)
         return (printf("Error: the weight or the height of your map is big\n"), 1);
     mlx = mlx_init();
-    mlx_win = mlx_new_window(mlx, img.window_weight, img.window_height, "raycaster");
-    img.img = mlx_new_image(mlx, img.window_weight, img.window_height);
+    mlx_win = mlx_new_window(mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "raycaster");
+    img.img = mlx_new_image(mlx, img.window_width * MINIMAP_SCALE_FACTOR, img.window_height * MINIMAP_SCALE_FACTOR);
+    img3d.img = mlx_new_image(mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
+    img3d.addr = mlx_get_data_addr(img3d.img, &img3d.bits_per_pixel, &img3d.line_length, &img3d.endian);
+    img3d.window_height = WINDOW_HEIGHT;
+    img3d.window_width = WINDOW_WIDTH;
     render_wall(map, &img);
     render_floor(map, &img);
     p_setup(&p, map);
@@ -62,6 +69,7 @@ int	main(int argc, char **argv)
     var.player = p;
     var.map = map;
     var.rays = rays;
+    var.img3d = img3d;
     remove_p(map);
     mlx_hook(mlx_win, ON_DESTROY, 0, close_win, &var);
     mlx_hook(mlx_win, ON_KEYDOWN, 1L << 0, key_p, &var);

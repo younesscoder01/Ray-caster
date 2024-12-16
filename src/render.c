@@ -6,11 +6,11 @@ double deg2rad(double x)
 	return (x * (M_PI / 180.0));
 }
 
-void ft_put_pixel(t_data *data, int x, int y, int color)
+void ft_put_pixel(t_img_info *data, int x, int y, int color)
 {
     char *pxl;
 
-    if (x >= 0 && x < data->window_weight && y >= 0 && y < data->window_height )
+    if (x >= 0 && x < data->window_width && y >= 0 && y < data->window_height )
     {
         pxl = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
         *(unsigned int *)pxl = color;
@@ -59,18 +59,18 @@ char **create_map(int h, char *file_name)
     return map;
 }
 
-void render_tiles(t_data *data, int x, int y, int color)
+void render_tiles(t_img_info *data, int x, int y, int color)
 {
     int i[2];
 
     i[0] = 0;
     i[1] = 0;
-    while (i[0] < TILE_SIZE)
+    while (i[0] < TILE_SIZE * MINIMAP_SCALE_FACTOR)
     {
         i[1] = 0;
-        while (i[1] < TILE_SIZE)
+        while (i[1] < TILE_SIZE * MINIMAP_SCALE_FACTOR)
         {
-            if (i[0] == 0 || i[1] == 0 || i[0] == data->window_height || i[1] == data->window_weight)
+            if (i[0] == 0 || i[1] == 0 || i[0] == data->window_height || i[1] == data->window_width)
                ft_put_pixel(data, x + i[1], y + i[0], BLACK);
             else
                 ft_put_pixel(data, x + i[1], y + i[0], color);
@@ -80,7 +80,7 @@ void render_tiles(t_data *data, int x, int y, int color)
     }
 }
 
-void render_wall(char **map, t_data *data)
+void render_wall(char **map, t_img_info *data)
 {
     int i[2];
 
@@ -92,14 +92,14 @@ void render_wall(char **map, t_data *data)
         while (map[i[0]][i[1]])
         {
             if ( map[i[0]][i[1]] == '1')
-                render_tiles(data, i[1] * TILE_SIZE, i[0] * TILE_SIZE, ORANGE);
+                render_tiles(data, i[1] * TILE_SIZE * MINIMAP_SCALE_FACTOR, i[0] * TILE_SIZE * MINIMAP_SCALE_FACTOR, ORANGE);
             i[1]++;
         }
         i[0]++;
     }
 }
 
-void render_floor(char **map, t_data *data)
+void render_floor(char **map, t_img_info *data)
 {
     int i[2];
 
@@ -111,14 +111,14 @@ void render_floor(char **map, t_data *data)
         while (map[i[0]][i[1]])
         {
             if ( map[i[0]][i[1]] == '0' || map[i[0]][i[1]] == 'P')
-                render_tiles(data, i[1] * TILE_SIZE, i[0] * TILE_SIZE, WHITE);
+                render_tiles(data, i[1] * TILE_SIZE * MINIMAP_SCALE_FACTOR, i[0] * TILE_SIZE * MINIMAP_SCALE_FACTOR, WHITE);
             i[1]++;
         }
         i[0]++;
     }
 }
 
-void draw_line(double x, double y, double x1, double y1, t_player *p, t_data *data, int color)
+void draw_line(double x, double y, double x1, double y1, t_player *p, t_img_info *data, int color)
 {
     double dx;
     double dy;
@@ -144,7 +144,7 @@ void draw_line(double x, double y, double x1, double y1, t_player *p, t_data *da
     }
 }
 
-void render_p(char **map, t_data *data, t_player *p)
+void render_p(char **map, t_img_info *data, t_player *p)
 {
     int d;
     double x1;
@@ -154,29 +154,10 @@ void render_p(char **map, t_data *data, t_player *p)
     for (int i = 0; i < d; i++)
         for (int j = 0; j < d; j++)
             if (pow(j - p->radius, 2) + pow(i - p->radius,2) <= pow(p->radius,2))
-                ft_put_pixel(data, j+p->x-p->radius, i+p->y-p->radius, RED);
-    x1 = p->x + cos(deg2rad(p->rotationAngle)) * 20;
-    y1 = p->y + sin(deg2rad(p->rotationAngle)) * 20;
-<<<<<<< HEAD:src/render.c
-    draw_line(p->x, p->y, x1, y1, p, data, BLUE);
-=======
-    draw_line(p->x, p->y, x1, y1, p, data, RED);
->>>>>>> e3c56d454f697e9faaee0add8494643ecdd09b42:src/utils.c
-}
-
-
-void flood_fill(char **map, int x, int y, int h, int w, t_param par)
-{
-    if (x < 0 || y < 0 || y > h || x > w || map[y][x] == '1' || map[y][x] == 'D')
-        return ;
-    // render_tiles(par.mlx, par.mlx_win, x* TILE_SIZE, y* TILE_SIZE, 0x000000FF);
-    if (map[y][x] == 'P' || map[y][x] == '0')
-        map[y][x] = 'D';
-    // render_d(map, par.mlx_win, par.mlx);
-    flood_fill(map, x+1, y, h, w, par);
-    flood_fill(map, x-1, y, h, w, par);
-    flood_fill(map, x, y+1, h, w, par);
-    flood_fill(map, x, y-1, h, w, par);
+                ft_put_pixel(data, (j+p->x-p->radius)  * MINIMAP_SCALE_FACTOR  , (i+p->y-p->radius)  * MINIMAP_SCALE_FACTOR, RED);
+    x1 = p->x + cos(deg2rad(p->rotationAngle)) * 10;
+    y1 = p->y + sin(deg2rad(p->rotationAngle)) * 10;
+    draw_line(p->x * MINIMAP_SCALE_FACTOR, p->y * MINIMAP_SCALE_FACTOR, x1 * MINIMAP_SCALE_FACTOR, y1 * MINIMAP_SCALE_FACTOR, p, data, BLUE);
 }
 
 int count_file_lines(char *file_name)
