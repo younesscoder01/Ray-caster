@@ -23,11 +23,11 @@
 # define PINK 0x00D91656
 
 
-# define TILE_SIZE	32
-# define RADIUS 4
+# define TILE_SIZE	26
+# define RADIUS 5
 # define FOV_ANGLE 60
 # define WINDOW_WIDTH 720
-# define WINDOW_HEIGHT 320
+# define WINDOW_HEIGHT 720
 # define WALL_STRIP_WIDTH 1
 # define NUM_RAYS WINDOW_WIDTH / WALL_STRIP_WIDTH
 # define MINIMAP_SCALE_FACTOR 0.5
@@ -104,7 +104,6 @@ void draw_line(double x, double y, double x1, double y1, t_player *p, t_img_info
 int get_player_y(char **map);
 int get_player_x(char **map);
 int count_file_lines(char *file_name);
-void flood_fill(char **map, int x, int y, int h, int w, t_param par);
 void render_floor(char **map, t_img_info *data);
 void render_wall(char **map, t_img_info *data);
 void render_tiles(t_img_info *data, int x, int y, int color);
@@ -120,6 +119,11 @@ int key_r(int keycode, void *var);
 double deg2rad(double x);
 void ft_put_pixel(t_img_info *data, int x, int y, int color);
 double normalizeAngle(double angle);
-void render_3d(t_param *param);
+void render_3d_walls(t_param *param);
 void rect(t_img_info *data, int x, int y, int width, int height, int color);
+char	get_t(int trgb);
+char	get_r(int trgb);
+char	get_g(int trgb);
+char	get_b(int trgb);
+unsigned int darken_color(unsigned int color, double factor);
 #endif

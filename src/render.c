@@ -70,9 +70,9 @@ void render_tiles(t_img_info *data, int x, int y, int color)
         i[1] = 0;
         while (i[1] < TILE_SIZE * MINIMAP_SCALE_FACTOR)
         {
-            if (i[0] == 0 || i[1] == 0 || i[0] == data->window_height || i[1] == data->window_width)
-               ft_put_pixel(data, x + i[1], y + i[0], BLACK);
-            else
+            // if (i[0] == 0 || i[1] == 0 || i[0] == data->window_height || i[1] == data->window_width)
+            //    ft_put_pixel(data, x + i[1], y + i[0], BLACK);
+            // else
                 ft_put_pixel(data, x + i[1], y + i[0], color);
             i[1]++;
         }
@@ -155,9 +155,9 @@ void render_p(char **map, t_img_info *data, t_player *p)
         for (int j = 0; j < d; j++)
             if (pow(j - p->radius, 2) + pow(i - p->radius,2) <= pow(p->radius,2))
                 ft_put_pixel(data, (j+p->x-p->radius)  * MINIMAP_SCALE_FACTOR  , (i+p->y-p->radius)  * MINIMAP_SCALE_FACTOR, RED);
-    x1 = p->x + cos(deg2rad(p->rotationAngle)) * 10;
-    y1 = p->y + sin(deg2rad(p->rotationAngle)) * 10;
-    draw_line(p->x * MINIMAP_SCALE_FACTOR, p->y * MINIMAP_SCALE_FACTOR, x1 * MINIMAP_SCALE_FACTOR, y1 * MINIMAP_SCALE_FACTOR, p, data, BLUE);
+    x1 = p->x + cos(deg2rad(p->rotationAngle)) * 20;
+    y1 = p->y + sin(deg2rad(p->rotationAngle)) * 20;
+    draw_line(p->x * MINIMAP_SCALE_FACTOR, p->y * MINIMAP_SCALE_FACTOR, x1 * MINIMAP_SCALE_FACTOR, y1 * MINIMAP_SCALE_FACTOR, p, data, RED);
 }
 
 int count_file_lines(char *file_name)

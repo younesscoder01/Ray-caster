@@ -9,21 +9,31 @@ int key_p(int keycode, void *var)
     int check_y;
 
     param = (t_param *)var;
-    if (keycode == KEY_W || keycode == KEY_UP)
+    if (keycode == KEY_W || keycode == KEY_UP || keycode == KEY_A)
         param->player.walkDirection = 1;
-    else if (keycode == KEY_S || keycode == KEY_DOWN)
+    else if (keycode == KEY_S || keycode == KEY_DOWN || keycode == KEY_D)
         param->player.walkDirection = -1;
-    else if (keycode == KEY_A || keycode == KEY_LEFT)
+    else if (keycode == KEY_LEFT)
         param->player.turnDirection = -1;
-    else if (keycode == KEY_D || keycode == KEY_RIGHT)
+    else if (keycode == KEY_RIGHT)
         param->player.turnDirection = 1;
     else if (keycode == ESC)
         exit(1);
     param->player.rotationAngle += param->player.turnDirection * param->player.rotationSpeed;
     param->player.rotationAngle = normalizeAngle(param->player.rotationAngle);
     moveStep = param->player.walkDirection * param->player.moveSpeed;
-    check_x = param->player.x + round(cos(deg2rad(param->player.rotationAngle)) * moveStep);
-    check_y = param->player.y + round(sin(deg2rad(param->player.rotationAngle)) * moveStep);
+    if (keycode == KEY_A || keycode == KEY_D)
+    {
+        check_x = param->player.x - round(cos(deg2rad(param->player.rotationAngle + 90)) * moveStep);
+        check_y = param->player.y - round(sin(deg2rad(param->player.rotationAngle + 90)) * moveStep);
+    }
+    else
+    {
+        check_x = param->player.x + round(cos(deg2rad(param->player.rotationAngle)) * moveStep);
+        check_y = param->player.y + round(sin(deg2rad(param->player.rotationAngle)) * moveStep);
+    }
+    printf("walkDirection: %f\n", param->player.walkDirection);
+    printf("rotationAngle: %f\n", param->player.rotationAngle);
     if (param->map[param->player.y / TILE_SIZE][check_x / TILE_SIZE] != '1')
         param->player.x = check_x;
     if (param->map[check_y / TILE_SIZE][param->player.x / TILE_SIZE] != '1')
@@ -36,13 +46,13 @@ int key_r(int keycode, void *var)
     t_param *param;
 
     param = (t_param *)var;
-    if (keycode == KEY_W || keycode == KEY_UP)
+    if (keycode == KEY_W || keycode == KEY_UP || keycode == KEY_A)
         param->player.walkDirection = 0;
-    else if (keycode == KEY_S || keycode == KEY_DOWN)
+    else if (keycode == KEY_S || keycode == KEY_DOWN || keycode == KEY_D)
         param->player.walkDirection = 0;
-    else if (keycode == KEY_A || keycode == KEY_LEFT)
+    else if (keycode == KEY_LEFT)
         param->player.turnDirection = 0;
-    else if (keycode == KEY_D || keycode == KEY_RIGHT)
+    else if (keycode == KEY_RIGHT)
         param->player.turnDirection = 0;
     return 0;
 }
@@ -195,6 +205,30 @@ void castAllrays(t_param *param)
     // printf("player angle: %f\n", param->player.rotationAngle);
 }
 
+int ft_get_pixel(t_img_info *img, int x, int y)
+{
+    return *(int *)(img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8)));
+}
+
+void copy_pixl_img2img(t_img_info *dst, t_img_info *src)
+{
+    int i;
+    int j;
+    int color;
+
+    i = 0;
+    while (i < src->window_height)
+    {
+        j = 0;
+        while (j < src->window_width)
+        {
+            color = ft_get_pixel(src, j, i);
+            ft_put_pixel(dst, j, i, color);
+            j++;
+        }
+        i++;
+    }
+}
 
 int render_next_frame(void *var)
 {
@@ -202,14 +236,19 @@ int render_next_frame(void *var)
 
     param = (t_param *)var;
 
+    param->data.img = param->img3d.img;
+    param->data.addr = param->img3d.addr;
+    param->data.bits_per_pixel = param->img3d.bits_per_pixel;
+    param->data.line_length = param->img3d.line_length;
+    param->data.endian = param->img3d.endian;
+    castAllrays(param);
+    render_3d_walls(param);
+    // copy_pixl_img2img(&param->img3d, &param->data);
+    mlx_put_image_to_window(param->mlx, param->mlx_win, param->img3d.img, 0 , 0);
+    // mlx_put_image_to_window(param->mlx, param->mlx_win, param->data.img, 0 , 0);
     render_wall(param->map, &param->data);
     render_floor(param->map, &param->data);
-    castAllrays(param);
     render_p(param->map, &param->data, &param->player);
-    castAllrays(param);
-    render_3d(param);
-    mlx_put_image_to_window(param->mlx, param->mlx_win, param->img3d.img, 0 , 0);
-    mlx_put_image_to_window(param->mlx, param->mlx_win, param->data.img, 0 , 0);
     mlx_destroy_image(param->mlx, param->img3d.img);
     param->img3d.img = mlx_new_image(param->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);  
     param->img3d.addr = mlx_get_data_addr(param->img3d.img, &param->img3d.bits_per_pixel, &param->img3d.line_length, &param->img3d.endian);
