@@ -162,7 +162,7 @@ void castAllrays(t_param *param)
         if (param->rays[i].isRayFacingLeft)
             px = 1;
         while (xintercept >= 0 && xintercept < param->data.window_width \
-                && yintercept >= 0 && yintercept < param->data.window_height )
+                && yintercept >= 0 && yintercept < param->data.window_height)
         {
             if (param->map[(int)yintercept / TILE_SIZE][((int)xintercept / TILE_SIZE) - px] == '1')
             {
@@ -189,12 +189,14 @@ void castAllrays(t_param *param)
             param->rays[i].distance = Hdistance;
             param->rays[i].wallHitX = Hhitx;
             param->rays[i].wallHitY = Hhity;
+            param->rays[i].wasHitVertical = 0;
         }
         else
         {
             param->rays[i].distance = Vdistance;
             param->rays[i].wallHitX = Vhitx;
             param->rays[i].wallHitY = Vhity;
+            param->rays[i].wasHitVertical = 1;
         }
         // printf("after rayAngle: %f\n", rayAngle);
         draw_line(param->player.x * MINIMAP_SCALE_FACTOR, param->player.y * MINIMAP_SCALE_FACTOR,  param->rays[i].wallHitX * MINIMAP_SCALE_FACTOR,  param->rays[i].wallHitY * MINIMAP_SCALE_FACTOR, &param->player, &param->data, PINK);

@@ -10,7 +10,7 @@ void ft_put_pixel(t_img_info *data, int x, int y, int color)
 {
     char *pxl;
 
-    if (x >= 0 && x < data->window_width && y >= 0 && y < data->window_height )
+    if (x >= 0 && x < data->window_width && y >= 0 && y < data->window_height)
     {
         pxl = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
         *(unsigned int *)pxl = color;
@@ -129,10 +129,10 @@ void draw_line(double x, double y, double x1, double y1, t_player *p, t_img_info
 
     dx = x1 - x;
     dy = y1 - y;
-    if (abs(dx) > abs(dy))
-        steps = abs(dx);
+    if (fabs(dx) > fabs(dy))
+        steps = fabs(dx);
     else 
-        steps = abs(dy);
+        steps = fabs(dy);
     xinc = dx / steps;
     yinc = dy / steps;
     while (i <= steps)

@@ -14,6 +14,7 @@
 # define M_PI	3.14159265358979323846	/* pi */
 # define GREEN 0x0000FF00
 # define RED 0x00FF0000
+# define B_RED 0x00A30000
 # define BLUE 0x000000FF
 # define WHITE 0x00FFFFFF
 # define BLACK 0x00000000
@@ -26,7 +27,7 @@
 # define TILE_SIZE	26
 # define RADIUS 5
 # define FOV_ANGLE 60
-# define WINDOW_WIDTH 720
+# define WINDOW_WIDTH 1080
 # define WINDOW_HEIGHT 720
 # define WALL_STRIP_WIDTH 1
 # define NUM_RAYS WINDOW_WIDTH / WALL_STRIP_WIDTH
@@ -87,6 +88,7 @@ typedef struct s_ray
 	int isRayFacingUp;
 	int isRayFacingRight;
 	int isRayFacingLeft;
+	int wasHitVertical;
 }  t_ray;
 
 typedef struct s_param

@@ -44,20 +44,25 @@ void render_3d_walls(t_param *param)
     double wallStripHeight;
     double correctDistance;
     int shade_color;
+    int color;
     double alpha;
 
     int i;
 
     i = 0;
     correctDistance = 0;
+    color = RED;
     while (i < NUM_RAYS)
     {
         distanceProjPlane = ((double)WINDOW_WIDTH / 2.0) / tan(deg2rad(FOV_ANGLE / 2));
         correctDistance = param->rays[i].distance * cos(deg2rad(param->rays[i].rayAngle) - deg2rad(param->player.rotationAngle));
 
-        alpha = 1.0 - (40.0 / correctDistance);
-
-        shade_color = darken_color(RED, alpha);
+        alpha = 1.0 - (80.0 / correctDistance);
+        // if (param->rays[i].wasHitVertical != 1)
+        //     color = RED;
+        // else 
+        //     color = B_RED;
+        shade_color = darken_color(color, alpha);
         wallStripHeight = ((double)TILE_SIZE / correctDistance) * distanceProjPlane;
         rect(&param->img3d, i * WALL_STRIP_WIDTH, (WINDOW_HEIGHT / 2) - ((int)wallStripHeight / 2), WALL_STRIP_WIDTH, (int)wallStripHeight, shade_color);
         i++;

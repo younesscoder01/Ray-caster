@@ -48,8 +48,6 @@ int	main(int argc, char **argv)
     img.window_width = get_map_weight(map) * TILE_SIZE;
     printf("the width of the map is %zu\n", img.window_width);
     printf("the height of the map is %zu\n", img.window_height);
-    if (img.window_width > 1920 || img.window_height > 1080)
-        return (printf("Error: the weight or the height of your map is big\n"), 1);
     mlx = mlx_init();
     mlx_win = mlx_new_window(mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "raycaster");
     img.img = mlx_new_image(mlx, img.window_width * MINIMAP_SCALE_FACTOR, img.window_height * MINIMAP_SCALE_FACTOR);
