@@ -4,9 +4,7 @@
 int key_p(int keycode, void *var)
 {
     t_param *param;
-    double moveStep;
-    int check_x;
-    int check_y;
+    
 
     param = (t_param *)var;
     if (keycode == KEY_W || keycode == KEY_UP || keycode == KEY_A)
@@ -19,25 +17,7 @@ int key_p(int keycode, void *var)
         param->player.turnDirection = 1;
     else if (keycode == ESC)
         exit(1);
-    param->player.rotationAngle += param->player.turnDirection * param->player.rotationSpeed;
-    param->player.rotationAngle = normalizeAngle(param->player.rotationAngle);
-    moveStep = param->player.walkDirection * param->player.moveSpeed;
-    if (keycode == KEY_A || keycode == KEY_D)
-    {
-        check_x = param->player.x - round(cos(deg2rad(param->player.rotationAngle + 90)) * moveStep);
-        check_y = param->player.y - round(sin(deg2rad(param->player.rotationAngle + 90)) * moveStep);
-    }
-    else
-    {
-        check_x = param->player.x + round(cos(deg2rad(param->player.rotationAngle)) * moveStep);
-        check_y = param->player.y + round(sin(deg2rad(param->player.rotationAngle)) * moveStep);
-    }
-    printf("walkDirection: %f\n", param->player.walkDirection);
-    printf("rotationAngle: %f\n", param->player.rotationAngle);
-    if (param->map[param->player.y / TILE_SIZE][check_x / TILE_SIZE] != '1')
-        param->player.x = check_x;
-    if (param->map[check_y / TILE_SIZE][param->player.x / TILE_SIZE] != '1')
-        param->player.y = check_y;
+    param->key_code = keycode;
     return 0;
 }
 
@@ -138,7 +118,7 @@ void castAllrays(t_param *param)
             {
                 foundHwallhit = 1;
                 Hhitx = xintercept;
-                Hhity = yintercept;
+                Hhity = yintercept - py;
                 break;
             }
             yintercept += ystep;
@@ -167,7 +147,7 @@ void castAllrays(t_param *param)
             if (param->map[(int)yintercept / TILE_SIZE][((int)xintercept / TILE_SIZE) - px] == '1')
             {
                 foundVwallhit = 1;
-                Vhitx = xintercept;
+                Vhitx = xintercept- px;
                 Vhity = yintercept;
                 break;
             }
@@ -237,7 +217,31 @@ int render_next_frame(void *var)
     t_param *param;
 
     param = (t_param *)var;
+    //////////////
+    double moveStep;
+    int check_x;
+    int check_y;
 
+     param->player.rotationAngle += param->player.turnDirection * param->player.rotationSpeed;
+    param->player.rotationAngle = normalizeAngle(param->player.rotationAngle);
+    moveStep = param->player.walkDirection * param->player.moveSpeed;
+    if (param->key_code == KEY_A || param->key_code == KEY_D)
+    {
+        check_x = param->player.x - round(cos(deg2rad(param->player.rotationAngle + 90)) * moveStep);
+        check_y = param->player.y - round(sin(deg2rad(param->player.rotationAngle + 90)) * moveStep);
+    }
+    else
+    {
+        check_x = param->player.x + round(cos(deg2rad(param->player.rotationAngle)) * moveStep);
+        check_y = param->player.y + round(sin(deg2rad(param->player.rotationAngle)) * moveStep);
+    }
+    printf("walkDirection: %f\n", param->player.walkDirection);
+    printf("rotationAngle: %f\n", param->player.rotationAngle);
+    if (param->map[param->player.y / TILE_SIZE][check_x / TILE_SIZE] != '1')
+        param->player.x = check_x;
+    if (param->map[check_y / TILE_SIZE][param->player.x / TILE_SIZE] != '1')
+        param->player.y = check_y;
+    /////////////
     param->data.img = param->img3d.img;
     param->data.addr = param->img3d.addr;
     param->data.bits_per_pixel = param->img3d.bits_per_pixel;

@@ -7,8 +7,8 @@ void p_setup(t_player *p, char **map)
     p->turnDirection = 0;
     p->walkDirection = 0;
     p->rotationAngle = 0;
-    p->moveSpeed = 6.0;
-    p->rotationSpeed = 7;
+    p->moveSpeed = 1.0;
+    p->rotationSpeed = 1.0;
     p->x = (get_player_x(map) * TILE_SIZE) + TILE_SIZE / 2;
     p->y = (get_player_y(map) * TILE_SIZE) + TILE_SIZE/ 2;
 }

@@ -104,6 +104,7 @@ typedef struct s_param
 	t_player player;
 	t_ray *rays;
 	t_img_info img3d;
+	int key_code;
 	char **map;
 } t_param;
 
