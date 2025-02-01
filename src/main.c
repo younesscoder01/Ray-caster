@@ -44,18 +44,18 @@ int	main(int argc, char **argv)
     {
         printf("%s\n", map[i]);
     }
-    img.window_height = get_map_height(map) * TILE_SIZE;
-    img.window_width = get_map_weight(map) * TILE_SIZE;
-    printf("the width of the map is %zu\n", img.window_width);
-    printf("the height of the map is %zu\n", img.window_height);
+    img.img_height = get_map_height(map) * TILE_SIZE;
+    img.img_width = get_map_weight(map) * TILE_SIZE;
+    printf("the width of the map is %zu\n", img.img_width);
+    printf("the height of the map is %zu\n", img.img_height);
     mlx = mlx_init();
     mlx_win = mlx_new_window(mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "raycaster");
-    img.img = mlx_new_image(mlx, img.window_width * MINIMAP_SCALE_FACTOR, img.window_height * MINIMAP_SCALE_FACTOR);
+    img.img = mlx_new_image(mlx, img.img_width * MINIMAP_SCALE_FACTOR, img.img_height * MINIMAP_SCALE_FACTOR);
     img3d.img = mlx_new_image(mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
     img3d.addr = mlx_get_data_addr(img3d.img, &img3d.bits_per_pixel, &img3d.line_length, &img3d.endian);
-    img3d.window_height = WINDOW_HEIGHT;
-    img3d.window_width = WINDOW_WIDTH;
+    img3d.img_height = WINDOW_HEIGHT;
+    img3d.img_width = WINDOW_WIDTH;
     render_wall(map, &img);
     render_floor(map, &img);
     p_setup(&p, map);

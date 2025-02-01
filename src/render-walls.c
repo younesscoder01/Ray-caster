@@ -38,33 +38,105 @@ unsigned int darken_color(unsigned int color, double factor) {
 }
 
 
+// void render_3d_walls(t_param *param)
+// {
+//     double distanceProjPlane;
+//     double wallStripHeight;
+//     double correctDistance;
+//     int shade_color;
+//     int color;
+//     double alpha;
+
+//     int i;
+
+//     i = 0;
+//     correctDistance = 0;
+//     color = RED;
+//     while (i < NUM_RAYS)
+//     {
+//         distanceProjPlane = ((double)WINDOW_WIDTH / 2.0) / tan(deg2rad(FOV_ANGLE / 2));
+//         correctDistance = param->rays[i].distance * cos(deg2rad(param->rays[i].rayAngle) - deg2rad(param->player.rotationAngle));
+
+//         alpha = 1.0 - (80.0 / correctDistance);
+//         // if (param->rays[i].wasHitVertical != 1)
+//         //     color = RED;
+//         // else 
+//         //     color = B_RED;
+//         shade_color = darken_color(color, alpha);
+//         wallStripHeight = ((double)TILE_SIZE / correctDistance) * distanceProjPlane;
+//         rect(&param->img3d, i * WALL_STRIP_WIDTH, (WINDOW_HEIGHT / 2) - ((int)wallStripHeight / 2), WALL_STRIP_WIDTH, (int)wallStripHeight, shade_color);
+//         i++;
+//     }
+// }
+
+
+unsigned int	get_texture_pixel(t_img_info *img, int x, int y)
+{
+	char	*pxl;
+
+	pxl = 0;
+	if (x >= 0 && x < img->img_width && y >= 0 && y < img->img_height)
+	{
+		pxl = img->addr + (y * img->line_length + x * (img->bits_per_pixel
+					/ 8));
+	}
+	if (pxl == 0)
+		return (6);
+	return (*(unsigned int *)pxl);
+}
+
 void render_3d_walls(t_param *param)
 {
     double distanceProjPlane;
     double wallStripHeight;
     double correctDistance;
-    int shade_color;
+    int texture_x;
+    int texture_y;
     int color;
-    double alpha;
+    t_img_info img;
 
-    int i;
-
-    i = 0;
-    correctDistance = 0;
-    color = RED;
+    int i = 0;
+    int w = 64;
+    int h = 64;
+    img.img = mlx_xpm_file_to_image(param->mlx, "./BR1.xpm", &w, &h);
+    if (img.img == NULL)
+    {
+        printf("Error:\n");
+        exit(99);
+    }
+    img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
+    img.img_height = 64;
+    img.img_width = 64;
     while (i < NUM_RAYS)
     {
+        // Determine texture color based on hit type
+        if (param->rays[i].wasHitVertical)
+            texture_x = (int)(param->rays[i].wallHitY) % TILE_SIZE;
+        else
+            texture_x = (int)(param->rays[i].wallHitX) % TILE_SIZE;
+
+        // Scale texture_x to match texture width
+        texture_x = (texture_x * TEXTURE_SIZE) / TILE_SIZE;
+
+        // Correct distance to avoid fisheye distortion
         distanceProjPlane = ((double)WINDOW_WIDTH / 2.0) / tan(deg2rad(FOV_ANGLE / 2));
         correctDistance = param->rays[i].distance * cos(deg2rad(param->rays[i].rayAngle) - deg2rad(param->player.rotationAngle));
 
-        alpha = 1.0 - (80.0 / correctDistance);
-        // if (param->rays[i].wasHitVertical != 1)
-        //     color = RED;
-        // else 
-        //     color = B_RED;
-        shade_color = darken_color(color, alpha);
+        // Compute wall height
         wallStripHeight = ((double)TILE_SIZE / correctDistance) * distanceProjPlane;
-        rect(&param->img3d, i * WALL_STRIP_WIDTH, (WINDOW_HEIGHT / 2) - ((int)wallStripHeight / 2), WALL_STRIP_WIDTH, (int)wallStripHeight, shade_color);
+        int y_top = (WINDOW_HEIGHT / 2) - ((int)wallStripHeight / 2);
+        int y_low = y_top + wallStripHeight;
+
+        // Loop through each vertical pixel to apply texture mapping
+        for (int y = y_top; y < y_low; y++)
+        {
+            int d = y - y_top;
+            texture_y = (d * TEXTURE_SIZE) / wallStripHeight;
+
+            // Fetch color from texture
+            color = get_texture_pixel(&img, texture_x, texture_y);
+            ft_put_pixel(&param->img3d, i * WALL_STRIP_WIDTH, y, color);
+        }
         i++;
     }
 }

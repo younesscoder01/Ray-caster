@@ -22,6 +22,7 @@
 # define ORANGE 0x00EB5B00
 # define PURPLE 0x008A2BE2
 # define PINK 0x00D91656
+# define TEXTURE_SIZE 64
 
 
 # define TILE_SIZE	26
@@ -45,15 +46,19 @@ enum {
 	ESC = 65307
 };
 
-typedef struct	s_img_info {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-    size_t window_height;
-    size_t window_width;
+
+typedef struct s_img_info
+{
+	void		*img;
+	char		*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
+	int			img_height;
+	int			img_width;
+	char		*filename;
 }				t_img_info;
+
 
 typedef struct s_player
 {

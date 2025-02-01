@@ -10,7 +10,7 @@ void ft_put_pixel(t_img_info *data, int x, int y, int color)
 {
     char *pxl;
 
-    if (x >= 0 && x < data->window_width && y >= 0 && y < data->window_height)
+    if (x >= 0 && x < data->img_width && y >= 0 && y < data->img_height)
     {
         pxl = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
         *(unsigned int *)pxl = color;

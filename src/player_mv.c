@@ -131,8 +131,8 @@ void castAllrays(t_param *param)
             xstep *= -1;
         if (param->rays[i].isRayFacingUp)
             py = 1;
-        while (xintercept >= 0 && xintercept < param->data.window_width \
-                && yintercept >= 0 && yintercept < param->data.window_height )
+        while (xintercept >= 0 && xintercept < param->data.img_width \
+                && yintercept >= 0 && yintercept < param->data.img_height )
         {
             if (param->map[((int)yintercept / TILE_SIZE) - py][(int)xintercept / TILE_SIZE] == '1')
             {
@@ -161,8 +161,8 @@ void castAllrays(t_param *param)
             ystep *= -1;
         if (param->rays[i].isRayFacingLeft)
             px = 1;
-        while (xintercept >= 0 && xintercept < param->data.window_width \
-                && yintercept >= 0 && yintercept < param->data.window_height)
+        while (xintercept >= 0 && xintercept < param->data.img_width \
+                && yintercept >= 0 && yintercept < param->data.img_height)
         {
             if (param->map[(int)yintercept / TILE_SIZE][((int)xintercept / TILE_SIZE) - px] == '1')
             {
@@ -219,10 +219,10 @@ void copy_pixl_img2img(t_img_info *dst, t_img_info *src)
     int color;
 
     i = 0;
-    while (i < src->window_height)
+    while (i < src->img_height)
     {
         j = 0;
-        while (j < src->window_width)
+        while (j < src->img_width)
         {
             color = ft_get_pixel(src, j, i);
             ft_put_pixel(dst, j, i, color);
@@ -254,7 +254,7 @@ int render_next_frame(void *var)
     mlx_destroy_image(param->mlx, param->img3d.img);
     param->img3d.img = mlx_new_image(param->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);  
     param->img3d.addr = mlx_get_data_addr(param->img3d.img, &param->img3d.bits_per_pixel, &param->img3d.line_length, &param->img3d.endian);
-    param->img3d.window_height = WINDOW_HEIGHT;
-    param->img3d.window_width = WINDOW_WIDTH;
+    param->img3d.img_height = WINDOW_HEIGHT;
+    param->img3d.img_width = WINDOW_WIDTH;
     return 0;
 }
