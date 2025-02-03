@@ -2,4 +2,4 @@
 A simple Ray-caster engine in c with Minilibx library
 
 # A simple demonstration 
-maps/demo.webm
+[![Watch the video](https://i.sstatic.net/Vp2cE.png)](https://youtu.be/vt5fpE0bzSY)
